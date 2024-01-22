@@ -4,7 +4,10 @@
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+            ActivityStack stk = ActivityStack.instance;
+            stk.PushActivity(new MainActivity());
+
+            stk.MainLoop();
         }
     }
 }
