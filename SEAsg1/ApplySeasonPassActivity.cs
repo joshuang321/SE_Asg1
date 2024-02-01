@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SEAsg1
 {
-    internal class ApplySeasonPassActivity : Activity
+    public class ApplySeasonPassActivity : Activity
     {
         public void HandleInput(ActivityStack stckref)
         {

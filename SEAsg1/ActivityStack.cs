@@ -6,29 +6,33 @@ using System.Threading.Tasks;
 
 namespace SEAsg1
 {
-    internal class ActivityStack
+    public class ActivityStack
     {
         public static ActivityStack instance = new ActivityStack();
 
-        List<Activity> activities;
+        Stack<Activity> activities;
+        Activity? curActivity = null;
+
         ActivityStack()
         {
-            activities = new List<Activity>();
+            activities = new Stack<Activity>();
         }
         public void PushActivity(Activity activity)
         {
-            activities.Add(activity);
+            activities.Push(activity);
+            curActivity = activity;
         }
         public void PopActivity()
         {
-            activities.RemoveAt(activities.Count - 1);
+            activities.Pop();
+            activities.TryPeek(out curActivity);
         }
-        public void MainLoop()
+        public void StartMainLoop()
         {
-            while (activities.Count!=0)
+            while (curActivity !=null)
             {
-                activities[activities.Count - 1].HandlePrompt(this);
-                activities[activities.Count - 1].HandleInput(this);
+                curActivity!.HandlePrompt(this);
+                curActivity!.HandleInput(this);
                 Console.Clear();
             }
         }

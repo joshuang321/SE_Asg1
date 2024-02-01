@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SEAsg1
 {
-    internal interface Activity
+    public interface Activity
     {
         public void HandlePrompt(ActivityStack stkref);
         public void HandleInput(ActivityStack stckref);

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SEAsg1
 {
-    internal class MainActivity : Activity
+    public class MainActivity : Activity
     {
         public void HandleInput(ActivityStack stckref)
         {
@@ -52,6 +52,7 @@ namespace SEAsg1
 
         public void HandlePrompt(ActivityStack stkref)
         {
+            Console.WriteLine(SysClock.instance.curTime);
             Console.WriteLine(
                 "Parking Management System\n" +
                 "==========================\n" +
