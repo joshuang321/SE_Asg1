@@ -15,12 +15,12 @@ namespace SEAsg1
         User? curUser;
         ApplicationCollection apps;
         
-        public App()
+        App()
         {
             users = new List<User>();
             curUser = null;
             vehicles = new List<Vehicle>();
-            apps = new ApplicationCollection();
+            apps = new ApplicationCollection(0);
 
             users.Add(new User("Joshua Ng", "password123!", "joshua_ng_admin", "Admin",
                 "97904893"));
@@ -29,6 +29,10 @@ namespace SEAsg1
 
             vehicles.Add(new Vehicle("SKX 1234 A", "12345678", "Car"));
             vehicles.Add(new Vehicle("FBC 5678 B", "87654321", "Motorcycle"));
+            //vehicles.Add(new Vehicle("SJK 7890 E", "34567890", "Car"));
+            //vehicles.Add(new Vehicle("GDE 2345 F", "45678901", "Motorcycle"));
+            //vehicles.Add(new Vehicle("SBC 6789 G", "56789012", "Bus"));
+            //vehicles.Add(new Vehicle("FGH 1234 H", "67890123", "Van"));
 #if DEBUG
             SeasonParking pass = new SeasonParking(DateTime.Now.AddMonths(-4),
                     DateTime.Now.AddMonths(-1),
@@ -56,7 +60,7 @@ namespace SEAsg1
             bool isRunning = true;
             while (isRunning)
             {
-                while (Login()) ;
+                while (!Login()) ;
                 bool doOptLoop = true;
                 while (doOptLoop)
                 {
@@ -76,9 +80,15 @@ namespace SEAsg1
                             TransferPass();
                             break;
                         case 5:
+                            if (curUser!.GetRole() != "Admin")
+                            {
+                                Console.WriteLine("Invalid Option! Try Again.");
+                                break;
+                            }
                             ProcessApplication();
                             break;
                         case 6:
+                            
                             doOptLoop = false;
                             Logout();
                             break;
@@ -87,7 +97,7 @@ namespace SEAsg1
             }
         }
 
-        public bool Login()
+        bool Login()
         {
             Console.Clear();
             Console.WriteLine("Enter username: ");
@@ -111,16 +121,15 @@ namespace SEAsg1
             if (user==null)
             {
                 Console.WriteLine("Failed to login, invalid username and/or password!");
+                return false;
             }
-            else
-            {
-                Console.WriteLine($"Successfully Logged in as {username}.");
-            }
-            Thread.Sleep(500);
+            Console.WriteLine($"Successfully Logged in as {username}.");
+            curUser = user;
+            Thread.Sleep(300);
             return true;
         }
 
-        public int SelectOption()
+        int SelectOption()
         {
             Console.Clear();
             Console.WriteLine("Season Parking System\n" +
@@ -128,9 +137,12 @@ namespace SEAsg1
                               "1. Apply Pass\n" +
                               "2. Renew Pass\n" +
                               "3. Terminate Pass\n" +
-                              "4. Transfer Pass\n" +
-                              "5. Process Application\n" +
-                              "6. Logout\n\n" +
+                              "4. Transfer Pass");
+            if (curUser!.GetRole() == "Admin")
+            {
+                Console.WriteLine("5. Process Application");
+            }
+            Console.WriteLine("6. Logout\n\n" +
                               "Your choice? ");
             string? option = Console.ReadLine();
             if (int.TryParse(option, out int op))
@@ -140,38 +152,94 @@ namespace SEAsg1
             else
             {
                 Console.WriteLine("Invalid Option! Try Again.");
+                Thread.Sleep(300);
             }
             return -1;
         }
 
-        public void ApplyPass()
+        void ApplyPass()
         {
             Console.Clear();
         }
 
-        public void RenewPass()
+        void RenewPass()
         {
             Console.Clear();
         }
 
-        public void TerminatePass()
+        void TerminatePass()
         {
             Console.Clear();
         }
 
-        public void TransferPass()
+        void TransferPass()
         {
             Console.Clear();
         }
 
-        public void ProcessApplication()
+        void ProcessApplication()
         {
-            Console.Clear();
+            int op=-1;
+            bool continueApp = true;
+            Iterator iter =apps.CreateIterator();
+            while (iter.HasMore() && continueApp)
+            {
+                Application app =(Application)iter.Next();
+                Console.Clear();
+                while (continueApp)
+                {
+
+                    Console.WriteLine($"User: {app.GetUser().GetUsername()}\n\n" +
+                                      $"Vehicle Details:\n" +
+                                      $"\tPlate Number: {app.GetVehicle().GetPlate()}\n" +
+                                      $"\tIUNumber: {app.GetVehicle().GetIUNumber()}\n" +
+                                      $"\tVehicle Type: {app.GetVehicle().GetVehicleType()}\n" +
+                                      $"\nPass Type: {app.GetPassType()}\n" +
+                                      $"\nStart Date: {app.GetStartMonth()}\n" +
+                                      $"\nEnd Date: {app.GetEndMonth()}\n");
+
+
+                    Console.WriteLine("1. Approve\n" +
+                                      "2. Reject\n" +
+                                      "3. Quit\n" +
+                                      "\nYour Choice? ");
+
+                    string? choice =Console.ReadLine();
+                    if (int.TryParse(choice, out op) && op>0 && op<=3)
+                    {
+                        switch (op)
+                        {
+                            case 1:
+                                apps.ApprovePass(app);
+                                break;
+
+                            case 2:
+                                apps.Remove(app);
+                                break;
+
+                            case 3:
+                                continueApp = false;
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid Input! Try Again.");
+                    }
+                }
+            }
+            if (op!=3)
+            {
+                Console.WriteLine("No more applications to be approved. Thank you.");
+                Thread.Sleep(300);
+            }
         }
 
-        public void Logout()
+        void Logout()
         {
             Console.Clear();
+            Console.WriteLine("Loggin Out..");
+            Thread.Sleep(300);
             curUser = null;
         }
     }
