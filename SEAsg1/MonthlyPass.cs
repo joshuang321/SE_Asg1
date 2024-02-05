@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 
 namespace SEAsg1
 {
-    public class MonthlyPass : SeasonPass
+    public class MonthlyPass : ChargeStrategy
     {
-        public override float PayParking(SeasonParking parking)
+        public float Charge(string vtype, TimeSpan span)
         {
-            throw new NotImplementedException();
+            return 0f;
         }
 
-        public override float RefundSelf()
+        public float GetMonthlyCost(string vtype)
         {
-            throw new NotImplementedException();
+            return 100f;
         }
     }
 }

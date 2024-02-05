@@ -2,32 +2,29 @@
 {
     public class Vehicle
     {
-        string licensePlate { get; }
-        string IUNumber { get; }
-        string vehicleType { get; }
+        string licensePlate;
+        string IUNumber;
+        string type;
+        string status = "Not Parked";
+        SeasonParking? pass;
 
-        private SeasonPass? pass;
-
-        public SeasonPass? Pass { get { return pass; } }
-
-        void AssignPass(SeasonPass pass)
+        public Vehicle(string plate, string IUNumber, string type)
         {
-            if (pass!=null)
-            {
-                this.pass = pass;
-            }
+            this.licensePlate = plate;
+            this.IUNumber = IUNumber;
+            this.type = type;
         }
 
-        void RemovePass()
+        public void SetPass(SeasonParking? pass)
         {
-            this.pass = null;
+           this.pass = pass;
         }
 
-        public static void TransferPass(Vehicle vehicle1, Vehicle vehicle2)
-        {
-            SeasonPass pass =vehicle1.pass;
-            vehicle1.RemovePass();
-            vehicle2.AssignPass(pass);
-        }
+        public string GetPlate() => licensePlate;
+        public string GetIUNumber() => IUNumber;
+        public string GetVehicleType() => type;
+        public SeasonParking? GetPass() => pass;
+        public bool IsParked() => status == "Parked";
+        public void Exit() => status = "Not Parked";
     }
 }

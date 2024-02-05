@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -8,36 +9,56 @@ namespace SEAsg1
 {
     public class User
     {
+        static int ID_AUTOINCRM =0;
         string name;
         string username;
         string password;
-        DateTime startDate;
-        DateTime endDate;
-        string studentId;
+        int id;
         string role;
         string phoneNumber;
 
-        SeasonPass pass;
+        List<SeasonParking> passes;
 
-        void BuyMonthlyPass(SeasonPass pass)
+        public User(string name, string password, string username,
+                string role,
+                string phoneNumber)
         {
-
+            id = ++ID_AUTOINCRM;
+            this.name = name;
+            this.password = password;
+            this.username = username;
+            this.role = role;
+            this.phoneNumber = phoneNumber;
+            passes = new List<SeasonParking>();
         }
 
-        void BuyDailyPass(SeasonPass pass)
-        {
+        public string GetName() => name;
+        public string GetUsername() => username;
+        public string GetPassword() => password;
+        public int GetId() => id;
+        public string GetRole() => role;
+        public string GetPhoneNumber() => phoneNumber;
 
+        public List<SeasonParking>.Enumerator GetPassses()
+        {
+            return passes.GetEnumerator();
         }
 
-        void TerminatePass()
+        public SeasonParking? GetPass(int index)
         {
-
+            if (index<passes.Count)
+                return passes[index];
+            return null;
         }
 
-        void GetName()
+        public void AddPass(SeasonParking pass)
         {
-
+            passes.Add(pass);
         }
 
+        public void Remove(SeasonParking pass)
+        {
+            passes.Remove(pass);
+        }
     }
 }

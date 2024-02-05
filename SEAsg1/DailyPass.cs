@@ -6,16 +6,22 @@ using System.Threading.Tasks;
 
 namespace SEAsg1
 {
-    public class DailyPass : SeasonPass
+    class DailyPass : NoPass
     {
-        public override float PayParking(SeasonParking parking)
+        const float CHARGE_LIMIT = 135f;
+        public override float Charge(string vtype, TimeSpan span)
         {
-            throw new NotImplementedException();
+            float amt =base.Charge(vtype, span);
+            if (amt > CHARGE_LIMIT)
+            {
+                amt = CHARGE_LIMIT;
+            }
+            return amt;
         }
 
-        public override float RefundSelf()
+        public override float GetMonthlyCost(string vtype)
         {
-            throw new NotImplementedException();
+            return 30f;
         }
     }
 }

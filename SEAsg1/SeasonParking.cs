@@ -1,23 +1,65 @@
-﻿namespace SEAsg1
+﻿
+namespace SEAsg1
 {
     public class SeasonParking
     {
-        int parkingId;
-        DateTime entryTime;
-        DateTime exitTime;
-        float amountCharged;
-        Vehicle vehicle { get; }
-        SParkingState curState;
+        static int ID_AUTOINCRM = 0;
+        int id;
+        DateTime startDate;
+        DateTime endDate;
+        Vehicle vehicle;
+        ChargeStrategy chargeStrategy;
 
+        PassState curState;
 
-        public TimeSpan GetTimeParked()
+        public SeasonParking(DateTime startDate, DateTime endDate,
+                Vehicle vehicle,
+                ChargeStrategy chargeStrategy)
         {
-            return exitTime.Subtract(entryTime);
+            id = ++ID_AUTOINCRM;
+            this.startDate = startDate;
+            this.endDate = endDate;
+            this.vehicle =vehicle;
+            this.chargeStrategy = chargeStrategy;
+            if (DateTime.Now> endDate)
+            {
+                curState = new ExpiredState(this);
+            }
+            else
+            {
+                curState = new ValidState(this);
+            }
+            this.vehicle.SetPass(this);
         }
 
-        public void Exit()
+        public Vehicle GetVehicle()
         {
-            curState.Exit();
+            return vehicle;
         }
+
+        public void Renew(DateTime newEndDate)
+        {
+            curState.Renew(newEndDate);
+        }
+
+        public void Terminate()
+        {
+            curState.Terminate();
+        }
+
+        public void SetState(PassState state)
+        {
+            curState = state;
+        }
+
+        public void SetNewEndDate(DateTime newEndDate)
+        {
+            endDate = newEndDate;
+        }
+
+        public int GetId() => id;
+        public DateTime GetStartDate() => startDate;
+        public DateTime GetEndDate() => endDate;
+        public ChargeStrategy GetChargeStrategy() => chargeStrategy;
     }
 }
