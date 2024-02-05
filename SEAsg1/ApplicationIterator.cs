@@ -3,15 +3,12 @@
     internal class ApplicationIterator : Iterator
     {
 
-        string type;
         ApplicationCollection colRef;
         int index;
 
-        public ApplicationIterator(ApplicationCollection appCollection,
-            string type)
+        public ApplicationIterator(ApplicationCollection appCollection)
         {
             colRef = appCollection;
-            this.type = type;
         }
 
         public bool HasMore()
@@ -19,9 +16,31 @@
             return colRef.Get(index) != null;
         }
 
-        public Collectable Next()
+        public object Next()
         {
-            return (Collectable)colRef.Get(index);
+            object obj = colRef.Get(index);
+            while (true)
+            {
+                index++;
+                if (colRef.Get(index) == null)
+                {
+                    break;
+                }
+                else
+                {
+                    Application? app = (Application?)colRef.Get(index);
+                    if (app!.GetPassType() == "Monthly" && !colRef.HasMonthlyLeft())
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        break;
+                    }
+
+                }
+            }
+            return obj;
         }
 
         public void Reset()

@@ -2,7 +2,7 @@
 {
     public interface Iterator
     {
-        public Collectable Next();
+        public object Next();
         public void Reset();
         public bool HasMore();
     }

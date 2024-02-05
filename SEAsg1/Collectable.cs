@@ -8,8 +8,8 @@ namespace SEAsg1
 {
     public interface Collectable
     {
-        public Iterator CreateIterator(string type);
+        public Iterator CreateIterator();
         public object? Get(int index);
-        public void Remove(int index);
+        public void Remove(object obj);
     }
 }
