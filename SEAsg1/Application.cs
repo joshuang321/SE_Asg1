@@ -28,17 +28,17 @@ namespace SEAsg1
             this.passType = passType;
         }
 
-        public SeasonParking Approve()
+        public float GetCharge()
         {
-            float charge = chargeStrategy.GetMonthlyCost(vehicle.GetVehicleType()) *
+            return chargeStrategy.GetMonthlyCost(vehicle.GetVehicleType()) *
                     (endMonth.Month - startMonth.Month);
-            Console.WriteLine($"Purchased {passType} Season Parking for {charge}.");
-            return new SeasonParking(startMonth, endMonth, vehicle, chargeStrategy);
         }
 
         public Vehicle GetVehicle() => vehicle;
         public User GetUser() => user;
         public DateTime GetStartMonth() => startMonth;
         public DateTime GetEndMonth() => endMonth;
+        public ChargeStrategy GetChargeStrategy() => chargeStrategy;
+        public string GetPassType() => passType;
     }
 }
