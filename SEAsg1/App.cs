@@ -28,6 +28,8 @@ namespace SEAsg1
                 "97904893"));
             users.Add(new User("Joshua Ng", "password123!", "joshua_ng_user", "User",
                 "97904893"));
+            users.Add(new User("Tan Zhi Yuan", "123", "zy_user", "User",
+                "93896816"));
 
             vehicles.Add(new Vehicle("SKX 1234 A", "12345678", "Car"));
             vehicles.Add(new Vehicle("FBC 5678 B", "87654321", "Motorcycle"));
@@ -55,6 +57,20 @@ namespace SEAsg1
                 "Debit Card",
                 "Monthly"));
             apps.Add(new Application(users[1], new Vehicle("SJK 7890 E",
+                "34567890", "Car"),
+                DateTime.Now, DateTime.Now.AddMonths(5),
+                new DailyPass(),
+                "Debit Card",
+                "Daily"));
+            //renew season pass
+            apps.Add(new Application(users[2], new Vehicle("SGP 9389 A",
+                "23456789", "Car"),
+                DateTime.Now, DateTime.Now.AddMonths(5),
+                new MonthlyPass(),
+                "Debit Card",
+                "Monthly"));
+
+            apps.Add(new Application(users[2], new Vehicle("SGP 6816 E",
                 "34567890", "Car"),
                 DateTime.Now, DateTime.Now.AddMonths(5),
                 new DailyPass(),
@@ -175,7 +191,8 @@ namespace SEAsg1
 
         void RenewPass()
         {
-            Console.Clear();
+            Console.WriteLine("renew season pass");
+            //Console.Clear();
         }
 
         void TerminatePass()
@@ -199,7 +216,7 @@ namespace SEAsg1
             while (iter.HasMore() && continueApp)
             {
                 bool continuePrompt = true;
-                Application app =(Application)iter.Next();
+                Application app = (Application)iter.Next();
                 while (continueApp && continuePrompt)
                 {
                     Console.Clear();
@@ -218,7 +235,7 @@ namespace SEAsg1
                                       "3. Quit\n" +
                                       "\nYour Choice? ");
 
-                    string? choice =Console.ReadLine();
+                    string? choice = Console.ReadLine();
                     if (int.TryParse(choice, out op) && op>0 && op<=3)
                     {
                         switch (op)
@@ -255,6 +272,7 @@ namespace SEAsg1
                 apps.Remove(app);
             }
         }
+
 
         void Logout()
         {
