@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace SEAsg1
@@ -15,6 +16,9 @@ namespace SEAsg1
         List<Carpark> carparks;
         User? curUser;
         ApplicationCollection apps;
+
+        readonly Regex vehicleNumFormat = new Regex(@"[A-Z]{3} [0-9]{4} [A-Z]{1}");
+        readonly Regex vehicleIUFormat = new Regex(@"[0-9]{8}"); 
         
         App()
         {
@@ -33,10 +37,10 @@ namespace SEAsg1
 
             vehicles.Add(new Vehicle("SKX 1234 A", "12345678", "Car"));
             vehicles.Add(new Vehicle("FBC 5678 B", "87654321", "Motorcycle"));
-            //vehicles.Add(new Vehicle("SJK 7890 E", "34567890", "Car"));
-            //vehicles.Add(new Vehicle("GDE 2345 F", "45678901", "Motorcycle"));
-            //vehicles.Add(new Vehicle("SBC 6789 G", "56789012", "Bus"));
-            //vehicles.Add(new Vehicle("FGH 1234 H", "67890123", "Van"));
+            vehicles.Add(new Vehicle("SJK 7890 E", "34567890", "Car"));
+            vehicles.Add(new Vehicle("GDE 2345 F", "45678901", "Motorcycle"));
+            vehicles.Add(new Vehicle("SBC 6789 G", "56789012", "Bus"));
+            vehicles.Add(new Vehicle("FGH 1234 H", "67890123", "Van"));
 #if DEBUG
             SeasonParking pass = new SeasonParking(DateTime.Now.AddMonths(-4),
                     DateTime.Now.AddMonths(-1),
@@ -87,7 +91,7 @@ namespace SEAsg1
             bool isRunning = true;
             while (isRunning)
             {
-                while (!Login()) ;
+                //while (!Login()) ;
                 bool doOptLoop = true;
                 while (doOptLoop)
                 {
@@ -165,10 +169,12 @@ namespace SEAsg1
                               "2. Renew Pass\n" +
                               "3. Terminate Pass\n" +
                               "4. Transfer Pass");
+            /* 
             if (curUser!.GetRole() == "Admin")
             {
                 Console.WriteLine("5. Process Application");
             }
+            */ 
             Console.WriteLine("6. Logout\n\n" +
                               "Your choice? ");
             string? option = Console.ReadLine();
@@ -200,9 +206,171 @@ namespace SEAsg1
             Console.Clear();
         }
 
+        /// <summary>
+        ///    Allows the user to be able to transfer a valid season pass from one vehicle to another
+        /// </summary>
         void TransferPass()
         {
+            //Implementation for transfer of season pass as follows for the user
+            string? vehicleNum = default(string);
+            string? newVehicleNum = default(string);
+            string? newVehicleType = default(string);
+            string? newVehicleIU = default(string);
+            string vehicleType = string.Empty;
+            Vehicle targetVehicle;
+            List<string> vehicleNums = vehicles.Select<Vehicle, string>(delegate (Vehicle v) {
+                return v.GetPlate();
+            }).ToList<string>();
+
+            Console.Clear(); 
+
+            for (; ; )
+            {
+                Console.Write("Please enter your vehicular number in the correct format: ");
+
+                vehicleNum = Console.ReadLine()!.ToUpper(); 
+                
+                if (!vehicleNums.Contains(vehicleNum!))
+                {
+                    Console.Error.WriteLine("Specified vehicle is not found within the system please try again!");
+                    Thread.Sleep(2000);
+                }
+                else if (string.IsNullOrEmpty(vehicleNum!))
+                {
+                    Console.Error.WriteLine("Please specify a vehicle number!");
+                    Thread.Sleep(2000);
+                }
+                else
+                {
+                    break;
+                }
+                Console.Clear();
+            }
+
             Console.Clear();
+            Console.WriteLine($"Found vehicle with number {vehicleNum!}");
+            targetVehicle = vehicles.Find(delegate (Vehicle v) {
+                return v.GetPlate().Equals(vehicleNum);
+            })!;
+            vehicleType = targetVehicle.GetVehicleType();
+            Console.Clear();
+
+            for (; ; )
+            {
+                Console.Write("Great! Now please enter your new vehicular number in the correct format: ");
+
+                newVehicleNum = Console.ReadLine()!.ToUpper();
+
+                if (vehicleNums.Contains(newVehicleNum!))
+                {
+                    Console.Error.WriteLine("Specified vehicle has already been registered into the system. Please try entering another vehicle number!");
+                    Thread.Sleep(2000);
+                }
+                else if (string.IsNullOrEmpty(vehicleNum!))
+                {
+                    Console.Error.WriteLine("Please specify a vehicle number!");
+                    Thread.Sleep(2000);
+                }
+                else if (!vehicleNumFormat.Match(newVehicleNum!).Success)
+                {
+                    Console.Error.WriteLine("Please input a car plate number of a correct format");
+                    Thread.Sleep(2000);
+                }
+                else
+                {
+                    break;
+                }
+                Console.Clear();
+            }
+
+            Console.Clear();
+
+            for (; ; )
+            {
+                Console.WriteLine($"The vehicle type of the previous vehicle has been declared as {vehicleType}");
+                Console.Write("Excellent! Now please enter the vehicle type of your new vehicle: ");
+
+                newVehicleType = Console.ReadLine();
+
+                newVehicleType = newVehicleType![0].ToString().ToUpper() + newVehicleType.Substring(1, newVehicleType.Length-1).ToLower();
+
+                Console.WriteLine(newVehicleType); 
+
+                if (string.IsNullOrEmpty(newVehicleType!))
+                {
+                    Console.Error.WriteLine("Please enter a vehicle type!");
+                    Thread.Sleep(2000);
+                }
+                else if (!newVehicleType.Equals(vehicleType))
+                {
+                    Console.Error.WriteLine("Vehicle types do not match.");
+                    Thread.Sleep(2000);
+                }
+                else
+                {
+                    break;
+                }
+                Console.Clear();
+            }
+
+            Console.Clear();
+
+            for (; ; )
+            {
+                Console.Write("Good. Now enter the IU of your new vehicle: ");
+
+                newVehicleIU = Console.ReadLine()!.ToUpper();
+
+                if (!vehicleIUFormat.Match(newVehicleIU!).Success)
+                {
+                    Console.Error.WriteLine("The format for the vehicle IU is not correct please try again!");
+                }
+                else
+                {
+                    break;
+                }
+                Console.Clear();
+            }
+
+            Console.Clear();
+            Console.WriteLine("Are you sure you want to transfer your pass to the new vehicle? (Y/N)");
+            char choice;
+
+            for (; ; )
+            {
+                Console.Write("Your choice: ");
+                choice = Convert.ToChar(Console.ReadLine()!);
+
+                if (choice.Equals('N'))
+                {
+                    Console.WriteLine("Process aborted! Season pass not transferred");
+                    return;
+                }
+                else
+                {
+                    //update the pass as requested
+                    SeasonParking? pass = targetVehicle.GetPass();
+                    //check if the pass is still valid before transferring
+                    if (pass != null && pass!.GetEndDate() > DateTime.Now) //pass expiry date must be later than or equal to the current date and time
+                    {
+                        vehicles.Add(new Vehicle(newVehicleNum!, newVehicleIU!, newVehicleType!));
+                        Vehicle newVehicle = vehicles.Find(delegate (Vehicle v) {
+                            return v.GetPlate().Equals(newVehicleNum);
+                        })!;
+                        newVehicle.SetPass(pass);
+                        vehicles.Remove(targetVehicle);
+                        Console.WriteLine($"Season pass transferred successfully to vehicle {newVehicleNum} :)");
+                        Thread.Sleep(3000);
+                    }
+                    else
+                    {
+                        Console.Error.WriteLine("Unable to transfer pass to vehicle. No season pass detected or the season pass has already expired");
+                        Thread.Sleep(2000);
+                        return; 
+                    }
+                    Console.Clear(); 
+                }
+            }
         }
 
         void ProcessApplication()
