@@ -203,6 +203,84 @@ namespace SEAsg1
 
         void TerminatePass()
         {
+            List<SeasonParking> monthlypasses = new List<SeasonParking>();
+            IEnumerator<SeasonParking> userPasses = curUser.GetPasses();
+            SeasonParking sp = userPasses.Current;
+            if (sp.GetChargeStrategy().GetType().ToString() == "MonthlyPass" && DateTime.Now < Convert.ToDateTime(sp.GetEndDate))
+            {
+                monthlypasses.Add(sp);
+            }
+            while (userPasses.MoveNext())
+            {
+                sp = userPasses.Current;
+                if (sp.GetChargeStrategy().GetType().ToString() == "MonthlyPass" && DateTime.Now < Convert.ToDateTime(sp.GetEndDate))
+                {
+                    monthlypasses.Add(sp);
+                }
+
+            }
+            if (monthlypasses.Count == 0) 
+            {
+                Console.WriteLine("You do not have any valid monthly passes to terminate.");
+            }
+            else
+            {
+                int count = 0;
+                Console.WriteLine("{0,-5}{1,-12}{2,-27}", "", "License No", "End Date");
+                foreach (SeasonParking s in monthlypasses)
+                {
+                    count++;
+                    Vehicle v = s.GetVehicle();
+                    Console.WriteLine("{0,-5}{1,-11}{2,-27}", (count + ")"), v.GetPlate(), s.GetEndDate());
+                }
+            }
+            Console.Write("Please select a monthly pass to terminate: ");
+            int input = Convert.ToInt32(Console.ReadLine());
+            userPasses = curUser.GetPasses();
+            int track = 0;
+            if (userPasses.Current.GetChargeStrategy().GetType().ToString() == "MonthlyPass" && DateTime.Now < Convert.ToDateTime(sp.GetEndDate))
+            {
+                track++;
+                if (track == input)
+                {
+                    string reason = "";
+                    while (reason == "")
+                    {
+                        Console.Write("Please provide a reason for termination: ");
+                        reason = Convert.ToString(Console.ReadLine());
+                        if (reason != "")
+                        {
+                            userPasses.Current.Terminate();
+                            Console.WriteLine("Monthly pass has been successfully terminated.");
+                            break;
+                        }
+                    }
+                }
+            }
+            while (userPasses.MoveNext())
+            {
+                if (userPasses.Current.GetChargeStrategy().GetType().ToString() == "MonthlyPass" && DateTime.Now < Convert.ToDateTime(sp.GetEndDate))
+                {
+                    track++;
+                    if (track == input)
+                    {
+                        string reason = "";
+                        while (reason == "")
+                        {
+                            Console.Write("Please provide a reason for termination: ");
+                            reason = Convert.ToString(Console.ReadLine());
+                            if (reason != "")
+                            {
+                                userPasses.Current.Terminate();
+                                Console.WriteLine("Monthly pass has been successfully terminated.");
+                                break;
+                            }
+                        }
+                    }
+                }
+
+            }
+            //Need to update available total monthly season passes to incease by 1
             Console.Clear();
         }
 
