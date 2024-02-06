@@ -9,6 +9,8 @@
         public ApplicationIterator(ApplicationCollection appCollection)
         {
             colRef = appCollection;
+            index = -1;
+            MoveIterator();
         }
 
         public bool HasMore()
@@ -19,6 +21,12 @@
         public object Next()
         {
             object obj = colRef.Get(index);
+            MoveIterator();
+            return obj;
+        }
+
+        void MoveIterator()
+        {
             while (true)
             {
                 index++;
@@ -40,7 +48,6 @@
 
                 }
             }
-            return obj;
         }
 
         public void Reset()

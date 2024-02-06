@@ -10,6 +10,11 @@
             monthlyPassesLeft = amtOfMonthlyPasses;
         }
 
+        public ApplicationCollection()
+        {
+            monthlyPassesLeft = 0;
+        }
+
         public Iterator CreateIterator()
         {
             return new ApplicationIterator(this);

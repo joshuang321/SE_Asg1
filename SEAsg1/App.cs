@@ -52,6 +52,12 @@ namespace SEAsg1
                 new MonthlyPass(),
                 "Debit Card",
                 "Monthly"));
+            apps.Add(new Application(users[1], new Vehicle("SJK 7890 E",
+                "34567890", "Car"),
+                DateTime.Now, DateTime.Now.AddMonths(5),
+                new DailyPass(),
+                "Debit Card",
+                "Daily"));
 #endif
         }
 
@@ -182,13 +188,16 @@ namespace SEAsg1
             int op=-1;
             bool continueApp = true;
             Iterator iter =apps.CreateIterator();
+            ApplicationCollection removedApps = new ApplicationCollection();
+
+            Console.Clear();
             while (iter.HasMore() && continueApp)
             {
+                bool continuePrompt = true;
                 Application app =(Application)iter.Next();
-                Console.Clear();
-                while (continueApp)
+                while (continueApp && continuePrompt)
                 {
-
+                    Console.Clear();
                     Console.WriteLine($"User: {app.GetUser().GetUsername()}\n\n" +
                                       $"Vehicle Details:\n" +
                                       $"\tPlate Number: {app.GetVehicle().GetPlate()}\n" +
@@ -196,7 +205,7 @@ namespace SEAsg1
                                       $"\tVehicle Type: {app.GetVehicle().GetVehicleType()}\n" +
                                       $"\nPass Type: {app.GetPassType()}\n" +
                                       $"\nStart Date: {app.GetStartMonth()}\n" +
-                                      $"\nEnd Date: {app.GetEndMonth()}\n");
+                                      $"End Date: {app.GetEndMonth()}\n");
 
 
                     Console.WriteLine("1. Approve\n" +
@@ -211,10 +220,11 @@ namespace SEAsg1
                         {
                             case 1:
                                 apps.ApprovePass(app);
-                                break;
+                                goto case 2;
 
                             case 2:
-                                apps.Remove(app);
+                                continuePrompt = false;
+                                removedApps.Add(app);
                                 break;
 
                             case 3:
@@ -232,6 +242,12 @@ namespace SEAsg1
             {
                 Console.WriteLine("No more applications to be approved. Thank you.");
                 Thread.Sleep(300);
+            }
+            iter = removedApps.CreateIterator();
+            while (iter.HasMore())
+            {
+                Application app = (Application)iter.Next();
+                apps.Remove(app);
             }
         }
 
