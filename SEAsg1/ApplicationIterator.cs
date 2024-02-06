@@ -49,10 +49,5 @@
                 }
             }
         }
-
-        public void Reset()
-        {
-            index = 0;
-        }
     }
 }

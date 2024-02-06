@@ -16,16 +16,18 @@ namespace SEAsg1
         string status;
         ChargeStrategy chargeStrategy;
         Vehicle vehicle;
+        Carpark carpark;
 
         string vehicleType;
 
-        public ParkingCharge(Vehicle vehicle)
+        public ParkingCharge(Vehicle vehicle, Carpark carpark)
         {
             id = ++ID_AUTOINCRM;
             cost = 0f;
             entryDate = DateTime.Now;
             exitDate = entryDate;
             status = "Pending";
+            this.carpark = carpark;
             this.vehicle = vehicle;
 
             if (vehicle.GetPass() == null)

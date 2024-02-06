@@ -2,15 +2,19 @@
 {
     public class Carpark
     {
-        int carparkNo { get; }
+        string carparkNo { get; }
         string location { get; }
         string description { get; }
 
-        public Carpark(int carparkNo, string location, string description)
+        public Carpark(string carparkNo, string location, string description)
         {
             this.carparkNo = carparkNo;
             this.location = location;
             this.description = description;
         }
+
+        string GetNumber() => carparkNo;
+        string GetLocation() => location;
+        string GetDesc() => description;
     }
 }

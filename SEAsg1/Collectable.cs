@@ -11,5 +11,6 @@ namespace SEAsg1
         public Iterator CreateIterator();
         public object? Get(int index);
         public void Remove(object obj);
+        public void Add(object obj);
     }
 }

@@ -12,14 +12,16 @@ namespace SEAsg1
         
         List<User> users;
         List<Vehicle> vehicles;
+        List<Carpark> carparks;
         User? curUser;
         ApplicationCollection apps;
         
         App()
         {
             users = new List<User>();
-            curUser = null;
             vehicles = new List<Vehicle>();
+            carparks = new List<Carpark>();
+            curUser = null;
             apps = new ApplicationCollection(0);
 
             users.Add(new User("Joshua Ng", "password123!", "joshua_ng_admin", "Admin",
@@ -58,6 +60,9 @@ namespace SEAsg1
                 new DailyPass(),
                 "Debit Card",
                 "Daily"));
+
+            carparks.Add(new Carpark("SKX 12A", "Jurong West", "A multi-storey carpark near the Jurong Point Shopping Centre, with 500 lots and electronic parking system."));
+            carparks.Add(new Carpark("FBC 34B", "Orchard Road", "A basement carpark under the Paragon Mall, with 800 lots and gantry parking system."));
 #endif
         }
 

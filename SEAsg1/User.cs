@@ -39,7 +39,7 @@ namespace SEAsg1
         public string GetRole() => role;
         public string GetPhoneNumber() => phoneNumber;
 
-        public List<SeasonParking>.Enumerator GetPassses()
+        public List<SeasonParking>.Enumerator GetPasses()
         {
             return passes.GetEnumerator();
         }
