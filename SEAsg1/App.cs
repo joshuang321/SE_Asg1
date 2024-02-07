@@ -44,23 +44,29 @@ namespace SEAsg1
 
             vehicles.Add(new Vehicle("SKX 1234 A", "12345678", "Car"));
             vehicles.Add(new Vehicle("FBC 5678 B", "87654321", "Motorcycle"));
-            vehicles.Add(new Vehicle("SJK 7890 E", "34567890", "Car"));
             //renew season pass variables
             users.Add(new User("Tan Zhi Yuan", "1", "1", "User",
                 "93896816"));
-#if DEBUG
-            apps.ApprovePass(new Application(users[1], new Vehicle("GHA 9012 C",
+            apps.ApprovePass(new Application(users[0], new Vehicle("GHA 9012 C",
                 "23456789", "Bus"),
                 DateTime.Now, DateTime.Now.AddMonths(5),
                 new MonthlyPass(),
                 "Debit Card",
                 "Monthly"));
-            apps.Add(new Application(users[1], new Vehicle("SJK 7890 E",
+            apps.ApprovePass(new Application(users[0], new Vehicle("SJK 7890 E",
                 "34567890", "Car"),
                 DateTime.Now, DateTime.Now.AddMonths(5),
                 new DailyPass(),
                 "Debit Card",
                 "Daily"));
+            apps.ApprovePass(new Application(users[0], new Vehicle("SJK 7890 E",
+                "34567890", "Car"),
+                DateTime.Now.AddMonths(-2), DateTime.Now.AddMonths(-1),
+                new DailyPass(),
+                "Debit Card",
+                "Daily"));
+
+            /*
             //renew season pass
             apps.Add(new Application(users[2], new Vehicle("SGP 6816 A",
                 "00000000", "Car"),
@@ -74,12 +80,9 @@ namespace SEAsg1
                 new MonthlyPass(),
                 "Debit Card",
                 "Monthly"));
-
-
-
-            carparks.Add(new Carpark("SKX 12A", "Jurong West", "A multi-storey carpark near the Jurong Point Shopping Centre, with 500 lots and electronic parking system."));
-            carparks.Add(new Carpark("FBC 34B", "Orchard Road", "A basement carpark under the Paragon Mall, with 800 lots and gantry parking system."));
-#endif
+            */
+            //carparks.Add(new Carpark("SKX 12A", "Jurong West", "A multi-storey carpark near the Jurong Point Shopping Centre, with 500 lots and electronic parking system."));
+            //carparks.Add(new Carpark("FBC 34B", "Orchard Road", "A basement carpark under the Paragon Mall, with 800 lots and gantry parking system."));
         }
 
         public void Run()
@@ -561,7 +564,7 @@ namespace SEAsg1
 
         void RenewPass()
         {
-            Console.WriteLine();
+            Console.Clear();
 
             // Retrieve the user's existing season parking passes
 
@@ -581,7 +584,6 @@ namespace SEAsg1
                 Thread.Sleep(1000);
                 return;
             }
-
 
 
             // Display the user's existing passes and prompt for renewal
@@ -641,6 +643,7 @@ namespace SEAsg1
 
         void TerminatePass()
         {
+            Console.Clear();
             List<SeasonParking> monthlypasses = new List<SeasonParking>();
             int counter = 0;
             while (curUser!.GetPass(counter) != null)
@@ -727,20 +730,24 @@ namespace SEAsg1
             //Need to update available total monthly season passes to incease by 1
             Console.Clear();
         }
+
+        // NOTE: I am done parsing garbage.
         void TransferPass()
         {
+
+            Console.Clear();
+           
             //Implementation for transfer of season pass as follows for the user
             string? vehicleNum;
             string? newVehicleNum;
             string? newVehicleType;
             string? newVehicleIU;
             string vehicleType;
+           
             Vehicle? targetVehicle;
             List<string> vehicleNums = vehicles.Select<Vehicle, string>(v => {
                 return v.GetPlate();
             }).ToList<string>();
-
-            Console.Clear(); 
 
             for (; ; )
             {
