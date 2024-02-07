@@ -12,9 +12,11 @@ namespace SEAsg1
 
         PassState curState;
 
+        ApplicationCollection ac; 
+
         public SeasonParking(DateTime startDate, DateTime endDate,
                 Vehicle vehicle,
-                ChargeStrategy chargeStrategy)
+                ChargeStrategy chargeStrategy, ApplicationCollection ac)
         {
             id = ++ID_AUTOINCRM;
             this.startDate = startDate;
@@ -30,6 +32,7 @@ namespace SEAsg1
                 curState = new ValidState(this);
             }
             this.vehicle.SetPass(this);
+            this.ac = ac; 
         }
 
         public Vehicle GetVehicle()
@@ -61,6 +64,7 @@ namespace SEAsg1
         public DateTime GetStartDate() => startDate;
         public DateTime GetEndDate() => endDate;
         public ChargeStrategy GetChargeStrategy() => chargeStrategy;
+        public ApplicationCollection GetApplicationCollection() => ac; 
 
         public override string ToString()
         {

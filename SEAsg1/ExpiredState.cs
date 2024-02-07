@@ -34,7 +34,7 @@ namespace SEAsg1
         public void Terminate()
         {
             Console.WriteLine("Terminated expired pass.");
-            pass.SetState(new TerminatedState());
+            pass.SetState(new TerminatedState(pass));
         }
 
         public void Transfer(Vehicle vehicle)

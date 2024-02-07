@@ -49,7 +49,7 @@
                 * (pass.GetEndDate().Month - pass.GetStartDate().Month);
             
             Console.WriteLine($"Refunded: ${returnAmount}");
-            pass.SetState(new TerminatedState());
+            pass.SetState(new TerminatedState(pass));
         }
 
         public void Transfer(Vehicle vehicle)

@@ -41,41 +41,14 @@ namespace SEAsg1
             vehicles.Add(new Vehicle("SKX 1234 A", "12345678", "Car"));
             vehicles.Add(new Vehicle("FBC 5678 B", "87654321", "Motorcycle"));
             vehicles.Add(new Vehicle("SJK 7890 E", "34567890", "Car"));
-            vehicles.Add(new Vehicle("GDE 2345 F", "45678901", "Motorcycle"));
-            vehicles.Add(new Vehicle("SBC 6789 G", "56789012", "Bus"));
-            vehicles.Add(new Vehicle("FGH 1234 H", "67890123", "Van"));
 #if DEBUG
-            SeasonParking pass = new SeasonParking(DateTime.Now.AddMonths(-4),
-                    DateTime.Now.AddMonths(-1),
-                    vehicles[0],
-                    new MonthlyPass());
-            users[1].AddPass(pass);
-
-            pass = new SeasonParking(DateTime.Now.AddMonths(-3),
-                DateTime.Now.AddMonths(2),
-                vehicles[1],
-                new DailyPass());
-            users[1].AddPass(pass);
-
-            pass = new SeasonParking(DateTime.Now.AddMonths(-3),
-                DateTime.Now.AddMonths(3),
-                vehicles[2],
-                new MonthlyPass());
-            users[2].AddPass(pass);
-
-            apps.Add(new Application(users[1], new Vehicle("GHA 9012 C",
+            apps.ApprovePass(new Application(users[1], new Vehicle("GHA 9012 C",
                 "23456789", "Bus"),
                 DateTime.Now, DateTime.Now.AddMonths(5),
                 new MonthlyPass(),
                 "Debit Card",
                 "Monthly"));
-            apps.Add(new Application(users[1], new Vehicle("SJK 7890 E",
-                "34567890", "Car"),
-                DateTime.Now, DateTime.Now.AddMonths(5),
-                new DailyPass(),
-                "Debit Card",
-                "Daily"));
-
+           
             carparks.Add(new Carpark("SKX 12A", "Jurong West", "A multi-storey carpark near the Jurong Point Shopping Centre, with 500 lots and electronic parking system."));
             carparks.Add(new Carpark("FBC 34B", "Orchard Road", "A basement carpark under the Paragon Mall, with 800 lots and gantry parking system."));
 #endif
@@ -317,37 +290,10 @@ namespace SEAsg1
                 //Construct the vehicle object using the given information
                 Vehicle newVehicle = new Vehicle(newVehicleCarPlateNumber!, newVehicleIU!, newVehicleType!);
                 //Construct new season pass for the user and then bind it to a vehicle
-                SeasonParking newSeasonParkingPass = new SeasonParking(DateTime.Now, DateTime.Now.AddMonths(1), newVehicle, chargingStrategy);
+                SeasonParking newSeasonParkingPass = new SeasonParking(DateTime.Now, 
+                    DateTime.Now.AddMonths(1), newVehicle, chargingStrategy);
                 //add the season pass to the user's list of SeasonParking 
                 curUser!.AddPass(newSeasonParkingPass); 
-        void TerminatePass()
-        {
-            List<SeasonParking> monthlypasses = new List<SeasonParking>();
-            int counter = 0;
-            while (curUser.GetPass(counter) != null)
-            {
-                if (curUser.GetPass(counter).GetChargeStrategy().GetType().Name.ToString() == "MonthlyPass" && DateTime.Now.Date < curUser.GetPass(counter).GetEndDate().Date)
-                {
-                    monthlypasses.Add(curUser.GetPass(counter));
-                }
-                counter++;
-            }
-            //IEnumerator<SeasonParking> userPasses = curUser.GetPasses();
-            //if (userPasses.Current != null) 
-            //{
-            //    if (userPasses.Current.GetChargeStrategy().GetType().ToString() == "MonthlyPass" && DateTime.Now < Convert.ToDateTime(userPasses.Current.GetEndDate))
-            //    {
-            //        monthlypasses.Add(userPasses.Current);
-            //    }
-            //    while (userPasses.MoveNext())
-            //    {
-            //        if (userPasses.Current != null)
-            //        {
-            //            if (userPasses.Current.GetChargeStrategy().GetType().ToString() == "MonthlyPass" && DateTime.Now < Convert.ToDateTime(userPasses.Current.GetEndDate))
-            //            {
-            //                monthlypasses.Add(userPasses.Current);
-            //            }
-            //        }
 
                 Console.WriteLine("Vehicle has been created! season pass created and bound to vehicle!");
                 Thread.Sleep(2000);
@@ -424,7 +370,12 @@ namespace SEAsg1
                     Console.Clear();
                 }
                 //create new season pass for the user, add it to the existing vehicle, and then add to the user's list of season passes
-                SeasonParking newSeasonParkingPass = new SeasonParking(DateTime.Now, DateTime.Now.AddMonths(1), existingVehicle, chargingStrategy);
+                SeasonParking newSeasonParkingPass = new SeasonParking(
+                    DateTime.Now, 
+                    DateTime.Now.AddMonths(1), 
+                    existingVehicle, 
+                    chargingStrategy
+                );
                 curUser!.AddPass(newSeasonParkingPass);
 
                 Console.WriteLine("Season pass has been created! season pass created and bound to vehicle!");
@@ -515,6 +466,32 @@ namespace SEAsg1
 
         void TerminatePass()
         {
+            List<SeasonParking> monthlypasses = new List<SeasonParking>();
+            int counter = 0;
+            while (curUser.GetPass(counter) != null)
+            {
+                if (curUser.GetPass(counter).GetChargeStrategy().GetType().Name.ToString() == "MonthlyPass" && DateTime.Now.Date < curUser.GetPass(counter).GetEndDate().Date)
+                {
+                    monthlypasses.Add(curUser.GetPass(counter));
+                }
+                counter++;
+            }
+            //IEnumerator<SeasonParking> userPasses = curUser.GetPasses();
+            //if (userPasses.Current != null) 
+            //{
+            //    if (userPasses.Current.GetChargeStrategy().GetType().ToString() == "MonthlyPass" && DateTime.Now < Convert.ToDateTime(userPasses.Current.GetEndDate))
+            //    {
+            //        monthlypasses.Add(userPasses.Current);
+            //    }
+            //    while (userPasses.MoveNext())
+            //    {
+            //        if (userPasses.Current != null)
+            //        {
+            //            if (userPasses.Current.GetChargeStrategy().GetType().ToString() == "MonthlyPass" && DateTime.Now < Convert.ToDateTime(userPasses.Current.GetEndDate))
+            //            {
+            //                monthlypasses.Add(userPasses.Current);
+            //            }
+            //        }
             //    }
             //}
             if (monthlypasses.Count == 0) 
@@ -580,13 +557,13 @@ namespace SEAsg1
         void TransferPass()
         {
             //Implementation for transfer of season pass as follows for the user
-            string? vehicleNum = default(string);
-            string? newVehicleNum = default(string);
-            string? newVehicleType = default(string);
-            string? newVehicleIU = default(string);
-            string vehicleType = string.Empty;
-            Vehicle targetVehicle;
-            List<string> vehicleNums = vehicles.Select<Vehicle, string>(delegate (Vehicle v) {
+            string? vehicleNum;
+            string? newVehicleNum;
+            string? newVehicleType;
+            string? newVehicleIU;
+            string vehicleType;
+            Vehicle? targetVehicle;
+            List<string> vehicleNums = vehicles.Select<Vehicle, string>(v => {
                 return v.GetPlate();
             }).ToList<string>();
 
@@ -617,10 +594,8 @@ namespace SEAsg1
 
             Console.Clear();
             Console.WriteLine($"Found vehicle with number {vehicleNum!}");
-            targetVehicle = vehicles.Find(delegate (Vehicle v) {
-                return v.GetPlate().Equals(vehicleNum);
-            })!;
-            vehicleType = targetVehicle.GetVehicleType();
+            targetVehicle = vehicles.Find(v => { return v.GetPlate().Equals(vehicleNum); });
+            vehicleType = targetVehicle!.GetVehicleType();
             Console.Clear();
 
             for (; ; )
@@ -632,17 +607,17 @@ namespace SEAsg1
                 if (vehicleNums.Contains(newVehicleNum!))
                 {
                     Console.Error.WriteLine("Specified vehicle has already been registered into the system. Please try entering another vehicle number!");
-                    Thread.Sleep(2000);
+                    Thread.Sleep(500);
                 }
                 else if (string.IsNullOrEmpty(vehicleNum!))
                 {
                     Console.Error.WriteLine("Please specify a vehicle number!");
-                    Thread.Sleep(2000);
+                    Thread.Sleep(500);
                 }
                 else if (!vehicleNumFormat.Match(newVehicleNum!).Success)
                 {
                     Console.Error.WriteLine("Please input a car plate number of a correct format");
-                    Thread.Sleep(2000);
+                    Thread.Sleep(500);
                 }
                 else
                 {
@@ -667,12 +642,12 @@ namespace SEAsg1
                 if (string.IsNullOrEmpty(newVehicleType!))
                 {
                     Console.Error.WriteLine("Please enter a vehicle type!");
-                    Thread.Sleep(2000);
+                    Thread.Sleep(500);
                 }
                 else if (!newVehicleType.Equals(vehicleType))
                 {
                     Console.Error.WriteLine("Vehicle types do not match.");
-                    Thread.Sleep(2000);
+                    Thread.Sleep(500);
                 }
                 else
                 {
@@ -728,12 +703,12 @@ namespace SEAsg1
                         newVehicle.SetPass(pass);
                         vehicles.Remove(targetVehicle);
                         Console.WriteLine($"Season pass transferred successfully to vehicle {newVehicleNum} :)");
-                        Thread.Sleep(3000);
+                        Thread.Sleep(500);
                     }
                     else
                     {
                         Console.Error.WriteLine("Unable to transfer pass to vehicle. No season pass detected or the season pass has already expired");
-                        Thread.Sleep(2000);
+                        Thread.Sleep(500);
                         return; 
                     }
                     Console.Clear(); 

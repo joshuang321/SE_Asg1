@@ -8,6 +8,11 @@ namespace SEAsg1
 {
     public class TerminatedState : PassState
     {
+        public TerminatedState(SeasonParking pass)
+        {
+            pass.GetApplicationCollection().IncrementMonthlyPass(); 
+        }
+
         public void Renew(DateTime newEndDate)
         {
             Console.WriteLine("Cannot renew terminated pass!");
