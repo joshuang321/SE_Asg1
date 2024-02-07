@@ -26,5 +26,10 @@
         public SeasonParking? GetPass() => pass;
         public bool IsParked() => status == "Parked";
         public void Exit() => status = "Not Parked";
+
+        public override string ToString()
+        {
+            return $"Season Pass{{License plate: {GetPlate()}, IU Number: {GetIUNumber()}, Vehicle type: {GetVehicleType()}, Pass: {GetPass()}}}";
+        }
     }
 }

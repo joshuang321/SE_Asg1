@@ -61,5 +61,10 @@ namespace SEAsg1
         public DateTime GetStartDate() => startDate;
         public DateTime GetEndDate() => endDate;
         public ChargeStrategy GetChargeStrategy() => chargeStrategy;
+
+        public override string ToString()
+        {
+            return $"Season Parking{{Id: {GetId()}, Start Date: {GetStartDate()}, End Date: {GetEndDate()}, Charge Strategy: {GetChargeStrategy()}}}";
+        }
     }
 }

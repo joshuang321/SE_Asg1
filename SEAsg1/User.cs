@@ -60,5 +60,10 @@ namespace SEAsg1
         {
             passes.Remove(pass);
         }
+
+        public override string ToString()
+        {
+            return $"User{{passes: {passes}, name: {GetName()}, username: {GetUsername()}, password: {GetPassword()}, Role: {GetRole}, Phone Number: {GetPhoneNumber()}}}";
+        }
     }
 }
