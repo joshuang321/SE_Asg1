@@ -22,17 +22,31 @@
 
         public bool HasMonthlyLeft() => monthlyPassesLeft > 0;
 
+        public void IncrementMonthlyPass()
+        {
+            monthlyPassesLeft++; 
+        }
+
         public void ApprovePass(Application app)
         {
-            if (app.GetPassType() == "Monthly" && monthlyPassesLeft<=0)
+            if (app.GetPassType() == "Monthly")
             {
-                Console.WriteLine("Failed to approve monthly pass. Limit reached.");
+                if (monthlyPassesLeft <= 0)
+                {
+                    Console.WriteLine("Failed to approve monthly pass. Limit reached.");
+                    return; 
+                }
+                else
+                {
+                    monthlyPassesLeft--;
+                }
             }
             float charge = app.GetCharge();
             Console.WriteLine($"Approved {app.GetPassType()} Season Parking for {charge}.");
             SeasonParking pass =new SeasonParking(app.GetStartMonth(), app.GetEndMonth(),
                 app.GetVehicle(),
-                app.GetChargeStrategy());
+                app.GetChargeStrategy(), 
+                this);
 
             app.GetUser().AddPass(pass);
             Remove(app);
