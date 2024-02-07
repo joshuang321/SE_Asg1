@@ -656,24 +656,6 @@ namespace SEAsg1
                 }
                 counter++;
             }
-            //IEnumerator<SeasonParking> userPasses = curUser.GetPasses();
-            //if (userPasses.Current != null) 
-            //{
-            //    if (userPasses.Current.GetChargeStrategy().GetType().ToString() == "MonthlyPass" && DateTime.Now < Convert.ToDateTime(userPasses.Current.GetEndDate))
-            //    {
-            //        monthlypasses.Add(userPasses.Current);
-            //    }
-            //    while (userPasses.MoveNext())
-            //    {
-            //        if (userPasses.Current != null)
-            //        {
-            //            if (userPasses.Current.GetChargeStrategy().GetType().ToString() == "MonthlyPass" && DateTime.Now < Convert.ToDateTime(userPasses.Current.GetEndDate))
-            //            {
-            //                monthlypasses.Add(userPasses.Current);
-            //            }
-            //        }
-            //    }
-            //}
             if (monthlypasses.Count == 0) 
             {
                 Console.WriteLine("You do not have any valid monthly passes to terminate.");
