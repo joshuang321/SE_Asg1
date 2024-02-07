@@ -100,7 +100,7 @@ namespace SEAsg1
                     switch (op)
                     {
                         case 1:
-                            //ApplyPass();
+                            ApplyPass();
                             break;
                         case 2:
                             RenewPass();
