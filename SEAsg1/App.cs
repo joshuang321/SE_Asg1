@@ -48,9 +48,9 @@ namespace SEAsg1
             //renew season pass variables
             users.Add(new User("Tan Zhi Yuan", "1", "1", "User",
                 "93896816"));
-            users[2].AddPass(new SeasonParking(DateTime.Now.AddMonths(-3), DateTime.Now.AddMonths(-1), vehicles[0],null,null));
+/*            users[2].AddPass(new SeasonParking(DateTime.Now.AddMonths(-3), DateTime.Now.AddMonths(-1), vehicles[0],null,null));
             users[2].AddPass(new SeasonParking(DateTime.Now.AddMonths(-24), DateTime.Now.AddMonths(-6), vehicles[2],null,null));
-            users[2].AddPass(new SeasonParking(DateTime.Now.AddMonths(-24), DateTime.Now, vehicles[2],null,null));
+            users[2].AddPass(new SeasonParking(DateTime.Now.AddMonths(-24), DateTime.Now, vehicles[2],null,null));*/
             //renew season pass variables
 
 #if DEBUG
@@ -203,7 +203,7 @@ namespace SEAsg1
         /// <summary>
         ///     The user is able to apply for a new season pass
         /// </summary>
-        /*void ApplyPass()
+        void ApplyPass()
         {
             // get all the information from curUser  
             // User class constructor format -> User(string name, string password, string username, string role,string phoneNumber)
@@ -235,7 +235,7 @@ namespace SEAsg1
                     else if (choice.Equals(0))
                     {
                         //quit the function
-                        return; 
+                        return;
                     }
                     else
                     {
@@ -323,20 +323,21 @@ namespace SEAsg1
                 //Construct the vehicle object using the given information
                 Vehicle newVehicle = new Vehicle(newVehicleCarPlateNumber!, newVehicleIU!, newVehicleType!);
                 //Construct new season pass for the user and then bind it to a vehicle
-                SeasonParking newSeasonParkingPass = new SeasonParking(DateTime.Now, 
+                SeasonParking newSeasonParkingPass = new SeasonParking(DateTime.Now,
                     DateTime.Now.AddMonths(1), newVehicle, chargingStrategy);
                 //add the season pass to the user's list of SeasonParking 
-                curUser!.AddPass(newSeasonParkingPass); 
+                curUser!.AddPass(newSeasonParkingPass);
 
                 Console.WriteLine("Vehicle has been created! season pass created and bound to vehicle!");
                 Thread.Sleep(2000);
-                Console.Clear(); 
+                Console.Clear();
             });
 
-            Action CreateNewSeasonPassAndAttachToExistingVehicle = new Action(delegate () {
+            Action CreateNewSeasonPassAndAttachToExistingVehicle = new Action(delegate ()
+            {
                 ChargeStrategy chargingStrategy;
                 string? existingVehicleCarPlateNumber;
-                Vehicle? existingVehicle; 
+                Vehicle? existingVehicle;
                 for (; ; )
                 {
                     Console.WriteLine("Welcome to the season pass registration service. To begin, select the type of season pass that you would like to apply for: ");
@@ -404,9 +405,9 @@ namespace SEAsg1
                 }
                 //create new season pass for the user, add it to the existing vehicle, and then add to the user's list of season passes
                 SeasonParking newSeasonParkingPass = new SeasonParking(
-                    DateTime.Now, 
-                    DateTime.Now.AddMonths(1), 
-                    existingVehicle, 
+                    DateTime.Now,
+                    DateTime.Now.AddMonths(1),
+                    existingVehicle,
                     chargingStrategy
                 );
                 curUser!.AddPass(newSeasonParkingPass);
@@ -414,7 +415,7 @@ namespace SEAsg1
                 Console.WriteLine("Season pass has been created! season pass created and bound to vehicle!");
                 Thread.Sleep(2000);
                 Console.Clear();
-            }); 
+            });
 
             //sub procedure start
             for (; ; )
@@ -428,7 +429,7 @@ namespace SEAsg1
                 if (decision.Equals(0))
                 {
                     //quit the function entirely
-                    Console.Clear(); 
+                    Console.Clear();
                     return;
                 }
                 else if (decision.Equals(1))
@@ -488,9 +489,9 @@ namespace SEAsg1
                     Console.Error.WriteLine("Invalid option! Please try again!");
                     Thread.Sleep(2000);
                 }
-                Console.Clear(); 
+                Console.Clear();
             }
-        }*/
+        }
 
         void RenewPass()
         {
@@ -500,10 +501,21 @@ namespace SEAsg1
                 // Retrieve the user's existing season parking passes
 
                 List<SeasonParking> userPasses = new List<SeasonParking>();
-                var passesEnumerator = curUser.GetPasses();
+                var passesEnumerator = curUser!.GetPasses();
+
+ 
+
                 while (passesEnumerator.MoveNext())
                 {
                     userPasses.Add(passesEnumerator.Current);
+                }
+
+                if (userPasses.Count <=0)
+                {
+                    Console.WriteLine("This user does not vehicles that have season passes. Please apply for a pass.");
+                    Thread.Sleep(2000);
+                    return;
+
                 }
 
 
@@ -524,14 +536,11 @@ namespace SEAsg1
 
 
                 Console.WriteLine("Enter the plate number of the vehicle you want to renew the pass for:\n");
-                string plateNumber = Console.ReadLine();
-
-                plateNumber = plateNumber.ToUpper();
+                string plateNumber = Console.ReadLine().ToUpper();
 
 
                 // Find the pass associated with the provided plate number
-                SeasonParking passToRenew = userPasses!.Find(pass => pass.GetVehicle().GetPlate() == plateNumber);
-                Console.WriteLine("date time now month\t",DateTime.Now.Month);
+                SeasonParking passToRenew = userPasses.Find(pass => pass.GetVehicle().GetPlate() == plateNumber);
 
                 // Check if the pass exists
                 if (passToRenew == null)
@@ -549,10 +558,10 @@ namespace SEAsg1
                     return;
                 }
 
-                // Calculate the new end date for the renewed pass (e.g., extend by one month)
+                // Calculate the new end date for the renewed pass (extend by one month)
                 DateTime newEndDate = passToRenew.GetEndDate().AddMonths(1);
 
-                // Update the pass with the new end date
+                // Update the pass 
                 passToRenew.Renew(newEndDate);
 
                 // Display the renewed pass details
@@ -561,13 +570,9 @@ namespace SEAsg1
                 Thread.Sleep(3000);
 
 
-
-
             }
 
 
-
-            // Console.Clear();
         }
 
         void TerminatePass()
