@@ -49,7 +49,6 @@
                 this);
 
             app.GetUser().AddPass(pass);
-            Remove(app);
         }
         
         public object? Get(int index)

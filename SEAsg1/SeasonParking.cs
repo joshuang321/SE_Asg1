@@ -64,7 +64,10 @@ namespace SEAsg1
         public DateTime GetStartDate() => startDate;
         public DateTime GetEndDate() => endDate;
         public ChargeStrategy GetChargeStrategy() => chargeStrategy;
-        public ApplicationCollection GetApplicationCollection() => ac; 
+        public ApplicationCollection GetApplicationCollection() => ac;
+
+        public bool IsExpired() => curState.GetType() == typeof(ExpiredState);
+        public bool IsTerminated() => curState.GetType() == typeof(TerminatedState);
 
         public override string ToString()
         {
