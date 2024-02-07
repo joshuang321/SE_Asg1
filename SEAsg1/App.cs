@@ -581,30 +581,15 @@ namespace SEAsg1
             int counter = 0;
             while (curUser.GetPass(counter) != null)
             {
-                if (curUser.GetPass(counter).GetChargeStrategy().GetType().Name.ToString() == "MonthlyPass" && DateTime.Now.Date < curUser.GetPass(counter).GetEndDate().Date)
+                if (curUser.GetPass(counter).GetChargeStrategy() != null)
                 {
-                    monthlypasses.Add(curUser.GetPass(counter));
+                    if (curUser.GetPass(counter).GetChargeStrategy().GetType().Name.ToString() == "MonthlyPass" && DateTime.Now.Date < curUser.GetPass(counter).GetEndDate().Date)
+                    {
+                        monthlypasses.Add(curUser.GetPass(counter));
+                    }
                 }
                 counter++;
             }
-            //IEnumerator<SeasonParking> userPasses = curUser.GetPasses();
-            //if (userPasses.Current != null) 
-            //{
-            //    if (userPasses.Current.GetChargeStrategy().GetType().ToString() == "MonthlyPass" && DateTime.Now < Convert.ToDateTime(userPasses.Current.GetEndDate))
-            //    {
-            //        monthlypasses.Add(userPasses.Current);
-            //    }
-            //    while (userPasses.MoveNext())
-            //    {
-            //        if (userPasses.Current != null)
-            //        {
-            //            if (userPasses.Current.GetChargeStrategy().GetType().ToString() == "MonthlyPass" && DateTime.Now < Convert.ToDateTime(userPasses.Current.GetEndDate))
-            //            {
-            //                monthlypasses.Add(userPasses.Current);
-            //            }
-            //        }
-            //    }
-            //}
             if (monthlypasses.Count == 0) 
             {
                 Console.WriteLine("You do not have any valid monthly passes to terminate.");
