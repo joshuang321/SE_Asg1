@@ -59,8 +59,8 @@ namespace SEAsg1
                 new DailyPass(),
                 "Debit Card",
                 "Daily"));
-            apps.ApprovePass(new Application(users[0], new Vehicle("SJK 7890 E",
-                "34567890", "Car"),
+            apps.ApprovePass(new Application(users[0], new Vehicle("SRT 7890 Y",
+                "54565890", "Car"),
                 DateTime.Now.AddMonths(-2), DateTime.Now.AddMonths(-1),
                 new DailyPass(),
                 "Debit Card",
@@ -726,13 +726,21 @@ namespace SEAsg1
             string vehicleType;
            
             Vehicle? targetVehicle;
-            List<string> vehicleNums = vehicles.Select<Vehicle, string>(v => {
-                return v.GetPlate();
-            }).ToList<string>();
+            List<string> vehicleNums = new List<string>();
+            var iter = curUser!.GetPasses();
+            int i = 1;
+            while (iter.MoveNext())
+            {
+                if (!iter.Current.IsTerminated())
+                {
+                    vehicleNums.Add(iter.Current.GetVehicle().GetPlate());
+                    Console.WriteLine($"[{i++}] {iter.Current.GetVehicle().GetPlate()}");
+                }
+            }
 
             for (; ; )
             {
-                Console.Write("Please enter your vehicular number in the correct format: ");
+                Console.Write("Please enter your plate number in the correct format: ");
 
                 vehicleNum = Console.ReadLine()!.ToUpper(); 
                 
@@ -743,7 +751,7 @@ namespace SEAsg1
                 }
                 else if (string.IsNullOrEmpty(vehicleNum!))
                 {
-                    Console.Error.WriteLine("Please specify a vehicle number!");
+                    Console.Error.WriteLine("Please specify a plate number!");
                     Thread.Sleep(1000);
                 }
                 else
@@ -755,13 +763,27 @@ namespace SEAsg1
 
             Console.Clear();
             Console.WriteLine($"Found vehicle with number {vehicleNum!}");
-            targetVehicle = vehicles.Find(v => { return v.GetPlate().Equals(vehicleNum); });
+
+
+            //targetVehicle = vehicles.Find(v => { return v.GetPlate().Equals(vehicleNum); });
+            targetVehicle = null;
+            iter = curUser!.GetPasses();
+            while (iter.MoveNext())
+            {
+                if (iter.Current.GetVehicle().GetPlate() ==vehicleNum)
+                {
+                    targetVehicle = iter.Current.GetVehicle();
+                }
+            }
+
+
+
             vehicleType = targetVehicle!.GetVehicleType();
             Console.Clear();
 
             for (; ; )
             {
-                Console.Write("Great! Now please enter your new vehicular number in the correct format: ");
+                Console.Write("Great! Now please enter your new plate number in the correct format: ");
 
                 newVehicleNum = Console.ReadLine()!.ToUpper();
 
@@ -772,7 +794,7 @@ namespace SEAsg1
                 }
                 else if (string.IsNullOrEmpty(vehicleNum!))
                 {
-                    Console.Error.WriteLine("Please specify a vehicle number!");
+                    Console.Error.WriteLine("Please specify a plate number!");
                     Thread.Sleep(1000);
                 }
                 else if (!vehicleNumFormat.Match(newVehicleNum!).Success)
@@ -816,7 +838,6 @@ namespace SEAsg1
                 }
                 Console.Clear();
             }
-
             Console.Clear();
 
             for (; ; )
@@ -914,6 +935,7 @@ namespace SEAsg1
                         {
                             case 1:
                                 apps.ApprovePass(app);
+                                vehicles.Add(app.GetVehicle());
                                 continuePrompt = false;
                                 removedApps.Add(app);
                                 break;
