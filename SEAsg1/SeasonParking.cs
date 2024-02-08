@@ -67,6 +67,7 @@ namespace SEAsg1
         public ApplicationCollection GetApplicationCollection() => ac;
 
         public bool IsExpired() => curState.GetType() == typeof(ExpiredState);
+        public bool IsTerminated() => curState.GetType() == typeof(TerminatedState);
 
         public override string ToString()
         {
