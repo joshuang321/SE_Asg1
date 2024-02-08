@@ -648,9 +648,8 @@ namespace SEAsg1
             int counter = 0;
             while (curUser!.GetPass(counter) != null)
             {
-                // NOTE: Please use the state to determine not end date!
 
-                if (curUser.GetPass(counter).GetChargeStrategy().GetType().Name.ToString() == "MonthlyPass" && DateTime.Now.Date < curUser.GetPass(counter).GetEndDate().Date)
+                if (curUser!.GetPass(counter).GetChargeStrategy().GetType().Name.ToString() == "MonthlyPass" && curUser!.GetPass(counter).IsExpired() == false)
                 {
                     monthlypasses.Add(curUser!.GetPass(counter));
                 }
@@ -676,9 +675,9 @@ namespace SEAsg1
                 //userPasses = curUser.GetPasses();
                 int track = 0;
                 counter = 0;
-                while (curUser.GetPass(counter) != null)
+                while (curUser!.GetPass(counter) != null)
                 {
-                    if (curUser!.GetPass(counter).GetChargeStrategy().GetType().Name.ToString() == "MonthlyPass" && DateTime.Now.Date < curUser.GetPass(counter).GetEndDate().Date)
+                    if (curUser!.GetPass(counter).GetChargeStrategy().GetType().Name.ToString() == "MonthlyPass" && curUser!.GetPass(counter).IsExpired() == false)
                     {
                         track++;
                         if (track == input)
@@ -692,10 +691,10 @@ namespace SEAsg1
                                 {
                                     for (int i = 0; i < users.Count; i++)
                                     {
-                                        if (users[i].GetId == curUser.GetId)
+                                        if (users[i].GetId == curUser!.GetId)
                                         {
                                             curUser!.GetPass(counter).Terminate();
-                                            users[i].Remove(curUser.GetPass(counter));
+                                            users[i].Remove(curUser!.GetPass(counter));
                                             Console.WriteLine("Monthly pass has been successfully terminated.");
                                             Thread.Sleep(1000);
                                             break;
