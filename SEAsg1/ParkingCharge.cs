@@ -34,7 +34,7 @@ namespace SEAsg1
             {
                 chargeStrategy = new NoPass();
             }
-            else
+            else if (!vehicle!.GetPass().IsExpired() && vehicle!.GetPass().IsTerminated())
             {
                 chargeStrategy = vehicle.GetPass()!.GetChargeStrategy();
             }

@@ -59,8 +59,8 @@ namespace SEAsg1
                 new DailyPass(),
                 "Debit Card",
                 "Daily"));
-            apps.ApprovePass(new Application(users[0], new Vehicle("SJK 7190 E",
-                "34567890", "Car"),
+            apps.ApprovePass(new Application(users[0], new Vehicle("SRT 7890 Y",
+                "54565890", "Car"),
                 DateTime.Now.AddMonths(-2), DateTime.Now.AddMonths(-1),
                 new DailyPass(),
                 "Debit Card",
@@ -217,15 +217,9 @@ namespace SEAsg1
             return -1;
         }
 
-        // NOTE: If this was a company, I would fire you immediately, but I am too tired and half
-        // your code is almost correct.
         void ApplyPass()
         {
             Console.Clear();
-            // NOTE: WHY! Please DO NOT put stupid lambdas the size of functions.
-            // You know I don't like lamdas because curly brackets means the start and 
-            // end of the functions for me!
-            // Please do not write like a stupid javascript script kid.
 
             // get all the information from curUser  
             // User class constructor format -> User(string name, string password, string username, string role,string phoneNumber)
@@ -278,7 +272,6 @@ namespace SEAsg1
                         return v.GetPlate().Equals(newVehicleCarPlateNumber);
                     });
 
-                    // NOTE: Regex matching not needed and not working!
                     if (!vehicleNumFormat.Match(newVehicleCarPlateNumber!).Success)
                     {
                         Console.Error.WriteLine("Format of the car plate number is not correct. Please try again!");
@@ -296,14 +289,7 @@ namespace SEAsg1
                     Console.Clear();
                 }
                 Console.Clear();
-                //Now get the IU of the vehicle
-                
-                // NOTE: while with true does the same thing
-                // I said this a couple of times to you specifically
-                // you do not understand the significance of the code
-                // to write this.
-                // Please just write more normally.
-                //for (; ; )
+
                 while (true)
                 {
                     Console.Write("Good! Now please enter the IU of your vehicle: ");
@@ -380,7 +366,7 @@ namespace SEAsg1
                        ? "Monthly" : "Daily"));
 
                 Console.WriteLine("Pass application will be approved by admin. Please wait.");
-                // NOTE: Please use shorter names next time.
+
 
                 /*
                 //Construct the vehicle object using the given information
@@ -396,11 +382,9 @@ namespace SEAsg1
     //            Console.Clear();
             //});
 
-            // NOTE: You were not taught this. Why use this? Garbage!
             /*
             Action CreateNewSeasonPassAndAttachToExistingVehicle = new Action(delegate ()
             {*//*
-                // NOTE: IS THIS A GOSH DAMN CV PASTE! WHY! Please revise programming 1!
                 ChargeStrategy chargingStrategy;
                 string? existingVehicleCarPlateNumber;
                 Vehicle? existingVehicle;
@@ -437,7 +421,6 @@ namespace SEAsg1
                 }
                 Console.Clear();
 
-                // NOTE: You have no idea what you are doing!
                 //prompt the user for his vehicle only the car plate number
                 // Prompt the user for the vehicle car plate number
                 for (; ; )
@@ -455,7 +438,6 @@ namespace SEAsg1
                     }
 
 
-                    // NOTE: Bro, keep it simple.
                     /*
                     if (!vehicleNumFormat.Match(existingVehicleCarPlateNumber!).Success)
                     {
@@ -482,8 +464,7 @@ namespace SEAsg1
 
             }
 
-            // NOTE: You have clearly not read the assignment! PLEASE READ!
-            //create new season pass for the user, add it to the existing vehicle, and then add to the user's list of season passes
+                //create new season pass for the user, add it to the existing vehicle, and then add to the user's list of season passes
             /*    
             SeasonParking newSeasonParkingPass = new SeasonParking(
                     DateTime.Now,
@@ -501,7 +482,6 @@ namespace SEAsg1
             */
             //});
 
-            // NOTE: Understand the mindset, but please understand the system we are trying to build!
             //sub procedure start
             /*
             for (; ; )
@@ -643,6 +623,8 @@ namespace SEAsg1
                 return;
 
             }
+            */
+
 
 
             // Update the pass 
@@ -664,9 +646,8 @@ namespace SEAsg1
             int counter = 0;
             while (curUser!.GetPass(counter) != null)
             {
-                // NOTE: Please use the state to determine not end date!
 
-                if (curUser.GetPass(counter).GetChargeStrategy().GetType().Name.ToString() == "MonthlyPass" && DateTime.Now.Date < curUser.GetPass(counter).GetEndDate().Date)
+                if (curUser!.GetPass(counter).GetChargeStrategy().GetType().Name.ToString() == "MonthlyPass" && curUser!.GetPass(counter).IsExpired() == false)
                 {
                     monthlypasses.Add(curUser!.GetPass(counter));
                 }
@@ -692,9 +673,9 @@ namespace SEAsg1
                 //userPasses = curUser.GetPasses();
                 int track = 0;
                 counter = 0;
-                while (curUser.GetPass(counter) != null)
+                while (curUser!.GetPass(counter) != null)
                 {
-                    if (curUser!.GetPass(counter).GetChargeStrategy().GetType().Name.ToString() == "MonthlyPass" && DateTime.Now.Date < curUser.GetPass(counter).GetEndDate().Date)
+                    if (curUser!.GetPass(counter).GetChargeStrategy().GetType().Name.ToString() == "MonthlyPass" && curUser!.GetPass(counter).IsExpired() == false)
                     {
                         track++;
                         if (track == input)
@@ -708,10 +689,10 @@ namespace SEAsg1
                                 {
                                     for (int i = 0; i < users.Count; i++)
                                     {
-                                        if (users[i].GetId == curUser.GetId)
+                                        if (users[i].GetId == curUser!.GetId)
                                         {
                                             curUser!.GetPass(counter).Terminate();
-                                            users[i].Remove(curUser.GetPass(counter));
+                                            users[i].Remove(curUser!.GetPass(counter));
                                             Console.WriteLine("Monthly pass has been successfully terminated.");
                                             Thread.Sleep(1000);
                                             break;
@@ -731,7 +712,6 @@ namespace SEAsg1
 
         }
 
-        // NOTE: I am done parsing garbage.
         void TransferPass()
         {
 
@@ -745,13 +725,26 @@ namespace SEAsg1
             string vehicleType;
            
             Vehicle? targetVehicle;
-            List<string> vehicleNums = vehicles.Select<Vehicle, string>(v => {
-                return v.GetPlate();
-            }).ToList<string>();
+            List<string> vehicleNums = new List<string>();
+
+            void PrintVehicle()
+            {
+                var iter = curUser!.GetPasses();
+                int i = 1;
+                while (iter.MoveNext())
+                {
+                    if (!iter.Current.IsTerminated())
+                    {
+                        vehicleNums.Add(iter.Current.GetVehicle().GetPlate());
+                        Console.WriteLine($"[{i++}] {iter.Current.GetVehicle().GetPlate()}");
+                    }
+                }
+            }
 
             for (; ; )
             {
-                Console.Write("Please enter your vehicular number in the correct format: ");
+                PrintVehicle(); 
+                Console.Write("Please enter your plate number in the correct format: ");
 
                 vehicleNum = Console.ReadLine()!.ToUpper(); 
                 
@@ -762,7 +755,7 @@ namespace SEAsg1
                 }
                 else if (string.IsNullOrEmpty(vehicleNum!))
                 {
-                    Console.Error.WriteLine("Please specify a vehicle number!");
+                    Console.Error.WriteLine("Please specify a plate number!");
                     Thread.Sleep(1000);
                 }
                 else
@@ -774,13 +767,27 @@ namespace SEAsg1
 
             Console.Clear();
             Console.WriteLine($"Found vehicle with number {vehicleNum!}");
-            targetVehicle = vehicles.Find(v => { return v.GetPlate().Equals(vehicleNum); });
+
+
+            //targetVehicle = vehicles.Find(v => { return v.GetPlate().Equals(vehicleNum); });
+            targetVehicle = null;
+            var iter = curUser!.GetPasses();
+            while (iter.MoveNext())
+            {
+                if (iter.Current.GetVehicle().GetPlate() ==vehicleNum)
+                {
+                    targetVehicle = iter.Current.GetVehicle();
+                }
+            }
+
+
+
             vehicleType = targetVehicle!.GetVehicleType();
             Console.Clear();
 
             for (; ; )
             {
-                Console.Write("Great! Now please enter your new vehicular number in the correct format: ");
+                Console.Write("Great! Now please enter your new plate number in the correct format: ");
 
                 newVehicleNum = Console.ReadLine()!.ToUpper();
 
@@ -791,7 +798,7 @@ namespace SEAsg1
                 }
                 else if (string.IsNullOrEmpty(vehicleNum!))
                 {
-                    Console.Error.WriteLine("Please specify a vehicle number!");
+                    Console.Error.WriteLine("Please specify a plate number!");
                     Thread.Sleep(1000);
                 }
                 else if (!vehicleNumFormat.Match(newVehicleNum!).Success)
@@ -835,7 +842,6 @@ namespace SEAsg1
                 }
                 Console.Clear();
             }
-
             Console.Clear();
 
             for (; ; )
@@ -884,6 +890,7 @@ namespace SEAsg1
                         vehicles.Remove(targetVehicle);
                         Console.WriteLine($"Season pass transferred successfully to vehicle {newVehicleNum} :)");
                         Thread.Sleep(1000);
+                        return; 
                     }
                     else
                     {
@@ -935,6 +942,7 @@ namespace SEAsg1
                         {
                             case 1:
                                 apps.ApprovePass(app);
+                                vehicles.Add(app.GetVehicle());
                                 continuePrompt = false;
                                 removedApps.Add(app);
                                 break;
