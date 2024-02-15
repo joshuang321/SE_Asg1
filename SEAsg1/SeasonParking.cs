@@ -54,6 +54,10 @@ namespace SEAsg1
         {
             curState = state;
         }
+        public PassState GetState()
+        {
+            return curState;
+        }
 
         public void SetNewEndDate(DateTime newEndDate)
         {

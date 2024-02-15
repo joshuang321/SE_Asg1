@@ -59,13 +59,13 @@ namespace SEAsg1
                 new DailyPass(),
                 "Debit Card",
                 "Daily"));
-            apps.ApprovePass(new Application(users[0], new Vehicle("SJK 7890 E",
+            apps.ApprovePass(new Application(users[0], new Vehicle("SJK 7190 E",
                 "34567890", "Car"),
                 DateTime.Now.AddMonths(-2), DateTime.Now.AddMonths(-1),
                 new DailyPass(),
                 "Debit Card",
                 "Daily"));
-
+  
             /*
             //renew season pass
             apps.Add(new Application(users[2], new Vehicle("SGP 6816 A",
@@ -139,6 +139,22 @@ namespace SEAsg1
                 }
             }
         }
+
+        public void Display(List<SeasonParking> userPasses)
+        {
+
+            Console.WriteLine("\n\nYour current season parking passes:\n");
+            foreach (SeasonParking pass in userPasses)
+            {
+                Console.WriteLine("----------------------------------------------");
+                Console.WriteLine($"Plate Number: {pass.GetVehicle().GetPlate()}");
+                Console.WriteLine($"Current State: {pass.GetState()}");
+                Console.WriteLine($"Start Date: {pass.GetStartDate()}");
+                Console.WriteLine($"End Date: {pass.GetEndDate()}\n");
+            }
+            Thread.Sleep(10000);
+        }
+  
 
         bool Login()
         {
@@ -462,10 +478,12 @@ namespace SEAsg1
                     }
                     */
                     Console.Clear();
-                }
+                Display(seasonPasses);
 
-                // NOTE: You have clearly not read the assignment! PLEASE READ!
-                //create new season pass for the user, add it to the existing vehicle, and then add to the user's list of season passes
+            }
+
+            // NOTE: You have clearly not read the assignment! PLEASE READ!
+            //create new season pass for the user, add it to the existing vehicle, and then add to the user's list of season passes
             /*    
             SeasonParking newSeasonParkingPass = new SeasonParking(
                     DateTime.Now,
@@ -572,10 +590,8 @@ namespace SEAsg1
             var passesEnumerator = curUser!.GetPasses();
             while (passesEnumerator.MoveNext())
             {
-                if (passesEnumerator.Current.IsExpired())
-                {
+                // add to list if pass state is not expired
                     userPasses.Add(passesEnumerator.Current);
-                }
             }
 
             if (userPasses.Count <=0)
@@ -593,7 +609,7 @@ namespace SEAsg1
             {
                 Console.WriteLine("----------------------------------------------");
                 Console.WriteLine($"Plate Number: {pass.GetVehicle().GetPlate()}");
-                Console.WriteLine($"Pass Type: {pass.GetType()}");
+                Console.WriteLine($"Current State: {pass.GetState()}");
                 Console.WriteLine($"Start Date: {pass.GetStartDate()}");
                 Console.WriteLine($"End Date: {pass.GetEndDate()}\n");
             }
@@ -615,22 +631,19 @@ namespace SEAsg1
                 Thread.Sleep(1000);
                 return;
             }
-
-            /*
-            // Check if the pass is already expired
-            else if (passToRenew.GetEndDate() < DateTime.Now)
-            {
-                Console.WriteLine("This pass has already expired. Please apply for a new pass.");
-                Thread.Sleep(1000);
+            if(passToRenew.IsExpired()) {
+                Console.Clear();
+                Console.WriteLine("----------------------------------------------");
+                Console.WriteLine($"Plate Number: {passToRenew.GetVehicle().GetPlate()}");
+                Console.WriteLine($"Current State: {passToRenew.GetState()}");
+                Console.WriteLine($"Start Date: {passToRenew.GetStartDate()}");
+                Console.WriteLine($"End Date: {passToRenew.GetEndDate()}\n\n");
+                Console.WriteLine("The current pass is expired and cannot be renewed");
+                Thread.Sleep(5000);
                 return;
+
             }
-            */
 
-            // NOTE: I gave you a Renew method and you didn't 
-            // use it. Like bro, what?
-
-            // Calculate the new end date for the renewed pass (extend by one month)
-            //DateTime newEndDate = passToRenew.GetEndDate().AddMonths(1);
 
             // Update the pass 
             passToRenew.Renew(passToRenew.GetEndDate().AddMonths(1));
@@ -638,7 +651,10 @@ namespace SEAsg1
             // Display the renewed pass details
             Console.WriteLine($"Season pass renewed successfully for vehicle with plate number <{plateNumber}>.\n");
             Console.WriteLine($"New End Date: {passToRenew.GetEndDate()}");
-            Thread.Sleep(3000);
+            Thread.Sleep(5000);
+
+            Display(userPasses);
+
         }
 
         void TerminatePass()
@@ -711,6 +727,8 @@ namespace SEAsg1
             }
             //Need to update available total monthly season passes to incease by 1
             Console.Clear();
+            Display(monthlypasses);
+
         }
 
         // NOTE: I am done parsing garbage.
@@ -873,7 +891,9 @@ namespace SEAsg1
                         Thread.Sleep(1000);
                         return; 
                     }
-                    Console.Clear(); 
+                    Console.Clear();
+                    Display(seasonPasses);
+
                 }
             }
         }
