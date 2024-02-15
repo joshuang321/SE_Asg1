@@ -201,15 +201,9 @@ namespace SEAsg1
             return -1;
         }
 
-        // NOTE: If this was a company, I would fire you immediately, but I am too tired and half
-        // your code is almost correct.
         void ApplyPass()
         {
             Console.Clear();
-            // NOTE: WHY! Please DO NOT put stupid lambdas the size of functions.
-            // You know I don't like lamdas because curly brackets means the start and 
-            // end of the functions for me!
-            // Please do not write like a stupid javascript script kid.
 
             // get all the information from curUser  
             // User class constructor format -> User(string name, string password, string username, string role,string phoneNumber)
@@ -262,7 +256,6 @@ namespace SEAsg1
                         return v.GetPlate().Equals(newVehicleCarPlateNumber);
                     });
 
-                    // NOTE: Regex matching not needed and not working!
                     if (!vehicleNumFormat.Match(newVehicleCarPlateNumber!).Success)
                     {
                         Console.Error.WriteLine("Format of the car plate number is not correct. Please try again!");
@@ -280,14 +273,7 @@ namespace SEAsg1
                     Console.Clear();
                 }
                 Console.Clear();
-                //Now get the IU of the vehicle
-                
-                // NOTE: while with true does the same thing
-                // I said this a couple of times to you specifically
-                // you do not understand the significance of the code
-                // to write this.
-                // Please just write more normally.
-                //for (; ; )
+
                 while (true)
                 {
                     Console.Write("Good! Now please enter the IU of your vehicle: ");
@@ -364,7 +350,7 @@ namespace SEAsg1
                        ? "Monthly" : "Daily"));
 
                 Console.WriteLine("Pass application will be approved by admin. Please wait.");
-                // NOTE: Please use shorter names next time.
+
 
                 /*
                 //Construct the vehicle object using the given information
@@ -380,11 +366,9 @@ namespace SEAsg1
     //            Console.Clear();
             //});
 
-            // NOTE: You were not taught this. Why use this? Garbage!
             /*
             Action CreateNewSeasonPassAndAttachToExistingVehicle = new Action(delegate ()
             {*//*
-                // NOTE: IS THIS A GOSH DAMN CV PASTE! WHY! Please revise programming 1!
                 ChargeStrategy chargingStrategy;
                 string? existingVehicleCarPlateNumber;
                 Vehicle? existingVehicle;
@@ -421,7 +405,6 @@ namespace SEAsg1
                 }
                 Console.Clear();
 
-                // NOTE: You have no idea what you are doing!
                 //prompt the user for his vehicle only the car plate number
                 // Prompt the user for the vehicle car plate number
                 for (; ; )
@@ -439,7 +422,6 @@ namespace SEAsg1
                     }
 
 
-                    // NOTE: Bro, keep it simple.
                     /*
                     if (!vehicleNumFormat.Match(existingVehicleCarPlateNumber!).Success)
                     {
@@ -464,7 +446,6 @@ namespace SEAsg1
                     Console.Clear();
                 }
 
-                // NOTE: You have clearly not read the assignment! PLEASE READ!
                 //create new season pass for the user, add it to the existing vehicle, and then add to the user's list of season passes
             /*    
             SeasonParking newSeasonParkingPass = new SeasonParking(
@@ -483,7 +464,6 @@ namespace SEAsg1
             */
             //});
 
-            // NOTE: Understand the mindset, but please understand the system we are trying to build!
             //sub procedure start
             /*
             for (; ; )
@@ -626,8 +606,6 @@ namespace SEAsg1
             }
             */
 
-            // NOTE: I gave you a Renew method and you didn't 
-            // use it. Like bro, what?
 
             // Calculate the new end date for the renewed pass (extend by one month)
             //DateTime newEndDate = passToRenew.GetEndDate().AddMonths(1);
@@ -712,7 +690,6 @@ namespace SEAsg1
             Console.Clear();
         }
 
-        // NOTE: I am done parsing garbage.
         void TransferPass()
         {
 
