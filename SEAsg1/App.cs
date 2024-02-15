@@ -704,19 +704,24 @@ namespace SEAsg1
            
             Vehicle? targetVehicle;
             List<string> vehicleNums = new List<string>();
-            var iter = curUser!.GetPasses();
-            int i = 1;
-            while (iter.MoveNext())
+
+            void PrintVehicle()
             {
-                if (!iter.Current.IsTerminated())
+                var iter = curUser!.GetPasses();
+                int i = 1;
+                while (iter.MoveNext())
                 {
-                    vehicleNums.Add(iter.Current.GetVehicle().GetPlate());
-                    Console.WriteLine($"[{i++}] {iter.Current.GetVehicle().GetPlate()}");
+                    if (!iter.Current.IsTerminated())
+                    {
+                        vehicleNums.Add(iter.Current.GetVehicle().GetPlate());
+                        Console.WriteLine($"[{i++}] {iter.Current.GetVehicle().GetPlate()}");
+                    }
                 }
             }
 
             for (; ; )
             {
+                PrintVehicle(); 
                 Console.Write("Please enter your plate number in the correct format: ");
 
                 vehicleNum = Console.ReadLine()!.ToUpper(); 
@@ -744,7 +749,7 @@ namespace SEAsg1
 
             //targetVehicle = vehicles.Find(v => { return v.GetPlate().Equals(vehicleNum); });
             targetVehicle = null;
-            iter = curUser!.GetPasses();
+            var iter = curUser!.GetPasses();
             while (iter.MoveNext())
             {
                 if (iter.Current.GetVehicle().GetPlate() ==vehicleNum)
@@ -863,6 +868,7 @@ namespace SEAsg1
                         vehicles.Remove(targetVehicle);
                         Console.WriteLine($"Season pass transferred successfully to vehicle {newVehicleNum} :)");
                         Thread.Sleep(1000);
+                        return; 
                     }
                     else
                     {
